@@ -1,6 +1,7 @@
 package com.example.kylemcnee.neighborhoodguide;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,18 +10,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class SearchActivity extends AppCompatActivity {
+    ListView listView = (ListView)findViewById(R.id.resultList);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        ListView listView = (ListView)findViewById(R.id.resultList);
 
 
         Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
@@ -40,6 +43,14 @@ public class SearchActivity extends AppCompatActivity {
             }
         }; listView.setAdapter(cursorAdapter);
     }
+
+    public AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent i = new Intent(SearchActivity.this, DetailActivity.class);
+            startActivity(i);
+        }
+    };
 
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
