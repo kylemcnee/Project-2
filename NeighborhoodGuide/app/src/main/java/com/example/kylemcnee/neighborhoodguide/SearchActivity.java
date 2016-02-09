@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class SearchActivity extends AppCompatActivity {
@@ -18,6 +19,9 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        ListView listView = (ListView)findViewById(R.id.resultList);
+
 
         Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
         CursorAdapter cursorAdapter = new CursorAdapter(SearchActivity.this, cursor,0) {
@@ -28,12 +32,13 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-                TextView textView = (TextView)view.findViewById(android.R.id.text1);
+                /*TextView textView = (TextView)view.findViewById(android.R.id.text1);
+                String resultString = cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_NAME))+ " " + cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_ADDRESS));
+                textView.setText(resultString);*/
 
-                //TODO How to display multiple values/columns
-                textView.setText(cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_NAME)));
+
             }
-        }
+        }; listView.setAdapter(cursorAdapter);
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
