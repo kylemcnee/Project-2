@@ -21,16 +21,16 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //TODO add heart "favorites" drawable
-        fab.setImageResource(R.drawable.heart);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO fab.setImageResource(R.drawable.hardcock);
                 Snackbar.make(view, "Added to your favorites", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
+
         });
     }
 

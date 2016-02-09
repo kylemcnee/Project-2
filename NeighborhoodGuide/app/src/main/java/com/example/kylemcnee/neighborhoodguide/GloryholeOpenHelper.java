@@ -23,6 +23,7 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
     public static final String COL_NAME = "NAME";
     public static final String COL_ADDRESS = "ADDRESS";
     public static final String COL_DESCRIPTION = "DESCRIPTION";
+    public static final String COL_FAVORITE = "FAVORITE" ;
 
     public static final String[] GLORYHOLE_COLUMNS = {COL_ID, COL_NAME, COL_ADDRESS, COL_DESCRIPTION};
 
@@ -30,7 +31,8 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
             GLORYHOLE_LIST_TABLE_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COL_NAME + " TEXT, " +
             COL_ADDRESS + " TEXT, " +
-            COL_DESCRIPTION + " TEXT )";
+            COL_DESCRIPTION + " TEXT " +
+            COL_FAVORITE + " TEXT )";
 
 
     private GloryholeOpenHelper (Context context) {
@@ -48,6 +50,7 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         db.execSQL(CREATE_GLORYHOLE_LIST_TABLE);
+
     }
 
     @Override
@@ -56,11 +59,12 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public long addItem(String name, String address, String description){
+    public long addItem(String name, String address, String description, String favorite){
         ContentValues values = new ContentValues();
         values.put(COL_NAME, name);
         values.put(COL_ADDRESS, address);
         values.put(COL_DESCRIPTION, description);
+        values.put(COL_FAVORITE, favorite);
 
         SQLiteDatabase db = this.getWritableDatabase();
         long returnId = db.insert(GLORYHOLE_LIST_TABLE_NAME, null, values);
