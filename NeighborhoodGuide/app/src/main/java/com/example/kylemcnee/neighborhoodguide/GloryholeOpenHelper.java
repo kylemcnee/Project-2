@@ -61,12 +61,15 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public long addItem(String name, String address, String description, String favorite){
+
+
+    public long addItem(String name, String address, String description, String favorite, String image){
         ContentValues values = new ContentValues();
         values.put(COL_NAME, name);
         values.put(COL_ADDRESS, address);
         values.put(COL_DESCRIPTION, description);
         values.put(COL_FAVORITE, favorite);
+        values.put(COL_IMAGE, image);
 
         SQLiteDatabase db = this.getWritableDatabase();
         long returnId = db.insert(GLORYHOLE_LIST_TABLE_NAME, null, values);

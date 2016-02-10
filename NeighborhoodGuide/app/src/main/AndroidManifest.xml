@@ -15,13 +15,15 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <meta-data android:name="android.app.searchable"
+                <meta-data
+                    android:name="android.app.searchable"
                     android:resource="@xml/searchable" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".FavoritesActivity"></activity>
     </application>
 
 </manifest>

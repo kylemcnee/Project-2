@@ -57,7 +57,8 @@ public class SearchActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
 
-        SearchManager searchManager = new SearchManager();
+
+        SearchManager searchManager = (SearchManager)SearchActivity.this.getSystemService(Context.SEARCH_SERVICE);
         searchManager.getSearchableInfo(getComponentName());
 
         return super.onCreateOptionsMenu(menu);
