@@ -43,6 +43,8 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
+
+                //TODO Figure out WTF is going on here
                 /*TextView textView = (TextView)view.findViewById(android.R.id.text1);
                 String resultString = cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_NAME))+ " " + cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_ADDRESS));
                 textView.setText(resultString);*/
@@ -50,16 +52,19 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         }; listView.setAdapter(cursorAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //TODO send the row to the detail activity
+                Intent i = new Intent(SearchActivity.this, FavoritesActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
-    //TODO Shouldn't this be listview.SetOnItemClick?
-    public AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent i = new Intent(SearchActivity.this, DetailActivity.class);
-            startActivity(i);
-        }
-    };
+
 
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();

@@ -23,14 +23,16 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ImageView headerImage = (ImageView)findViewById(R.id.headerImage);
-
+        //TODO retrieve header image from image column
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO fab.setImageResource(R.drawable.hardcock);
+
+                //TODO cure the erectile dysfunction
+                fab.setImageResource(R.drawable.hardcock);
                 Snackbar.make(view, "Added to your favorites", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -50,6 +52,8 @@ public class DetailActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
+        //TODO change SearchActivity to the parent activity/main activity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
