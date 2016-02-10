@@ -53,6 +53,28 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL(CREATE_GLORYHOLE_LIST_TABLE);
 
+        db.insert(GLORYHOLE_LIST_TABLE_NAME, "1", "Playpen", "687 8th Ave, New York, NY 10036 Times Square",
+                "One of the last remaining vestiges of the 'bad old days' of ye olde Times Square, Playpen stands three stories tall in what was once the " +
+                        "active sex shop district of NYC.  Videos and toys downstairs, six booths upstairs.  'Friendly' porters and staff, but the 'sheer volume' of customers  " +
+                        "(and what they leave behind) means it isn't the cleanest place to 'let loose'.  Prepare for an 'olfactory assault', and be sure to wear only 'rugged shoes' with 'grippy soles'.", "NO", "playpen");
+
+        db.insert(GLORYHOLE_LIST_TABLE_NAME, "2", "Port Authority", "625 8th Ave, New York, NY 10018 Times Square",
+                    "Not so much a XXX location as a SSS location (as in skeevy, sleazy, secretive), Port Authority is a 'hotspot' for the Jersey commuter crowd.  " +
+                            "One benefits from not having to be spotted entering an adult video store, allowing one to 'blend in' with regular folk.  It is a blessing and " +
+                            "a curse however, as misinterpreted non-verbal communication can lead to 'confrontation' with more 'closed minded types'. " +
+                            " Most of the men's rooms partitions have been 'sealed up', however the bathrooms by the 400s gates are still 'active' as of this time.", "NO", "portauthority2");
+
+        db.insert(GLORYHOLE_LIST_TABLE_NAME, "3", "Show World Center", "671 8th Ave, New York, NY 10036 Times Square", "Another 'relic' of 'Ed Koch era' New York sordidness, Show World Center is a 'gritty' XXX video store and peep show located right above Port Authority.   " +
+                "Although not as active and mostly catering to an 'older clientele', Show World Center boasts an 'absolutely ludicrous' selection of adult DVD's.  However, " +
+                "beware of the 'drug pushers and hustlers' with whom the management seems 'unconcerned'.  Dealers hocking 'coke and smoke' will invite you to walk with them over to 9th avenue.  " +
+                "You will be 'robbed blind' before you reach the next block.", "NO", "showworld");
+
+        db.insert(GLORYHOLE_LIST_TABLE_NAME, "4", "Video XCITEMENT", "746 3rd Ave, Brooklyn, NY 11232 Greenwood", "'Brooklyn's own' red light district is on 3rd ave west of Greenwood cemetery, and Video Xcitement is its 'cornerstone'.  " +
+                "Unless you live in the neighborhood, you 'shouldn't run into anyone you know' unless they're also heading to Xcitement.   However, 'all types' seem to troll this stretch beneath the expressway, so 'avoid eye contact' if necessary.", "NO", "videoexcitement");
+
+        db.insert(GLORYHOLE_LIST_TABLE_NAME, "5", "Xpression Video", "230 E 53rd St, New York, NY 10022 Midtown East", "This East side adult emporium on 53rd street is known for its 'ease of access',  and its single room's 'homespun charm', " +
+                "and a patronage consisting largely of 'lonely business types' from the area's many nearby hotels. Expect 'plenty of action' in the post-work time slot, but an 'eerily empty' atmosphere in the wee hours despite it's 'round the clock' hours of operation.", "NO", "xpression");
+
     }
 
     @Override
@@ -63,8 +85,9 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
 
 
 
-    public long addItem(String name, String address, String description, String favorite, String image){
+    public long addItem(SQLiteDatabase db, String id, String name, String address, String description, String favorite, String image){
         ContentValues values = new ContentValues();
+        values.put(COL_ID, id);
         values.put(COL_NAME, name);
         values.put(COL_ADDRESS, address);
         values.put(COL_DESCRIPTION, description);
@@ -91,7 +114,7 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor searchGloryholeList(String query){
+    public Cursor searchGloryholeListByName(String query){
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(GLORYHOLE_LIST_TABLE_NAME,
@@ -105,5 +128,23 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
+
+    public Cursor searchGloryholeListByAddress(String query){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(GLORYHOLE_LIST_TABLE_NAME,
+                GLORYHOLE_COLUMNS,
+                COL_ADDRESS + " LIKE ?",
+                new String[]{"%" + query + "%"},
+                null,
+                null,
+                null,
+                null);
+
+        return cursor;
+    }
+
+
+
 
 }

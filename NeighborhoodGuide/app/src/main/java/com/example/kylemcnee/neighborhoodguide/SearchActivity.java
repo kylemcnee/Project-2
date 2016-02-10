@@ -25,6 +25,13 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+
+            //TODO Something has to be done with this query, but i don't...know...what...
+            String query = intent.getStringExtra(SearchManager.QUERY);
+        }
+
 
 
         Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
@@ -45,6 +52,7 @@ public class SearchActivity extends AppCompatActivity {
         }; listView.setAdapter(cursorAdapter);
     }
 
+    //TODO Shouldn't this be listview.SetOnItemClick?
     public AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -63,4 +71,6 @@ public class SearchActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+
 }
