@@ -24,6 +24,7 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
     public static final String COL_ADDRESS = "ADDRESS";
     public static final String COL_DESCRIPTION = "DESCRIPTION";
     public static final String COL_FAVORITE = "FAVORITE" ;
+    public static final String COL_IMAGE = "IMAGE";
 
     public static final String[] GLORYHOLE_COLUMNS = {COL_ID, COL_NAME, COL_ADDRESS, COL_DESCRIPTION};
 
@@ -32,7 +33,8 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
             COL_NAME + " TEXT, " +
             COL_ADDRESS + " TEXT, " +
             COL_DESCRIPTION + " TEXT " +
-            COL_FAVORITE + " TEXT )";
+            COL_FAVORITE + " TEXT " +
+            COL_IMAGE + " TEXT )";
 
 
     private GloryholeOpenHelper (Context context) {

@@ -1,5 +1,6 @@
 package com.example.kylemcnee.neighborhoodguide;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -55,6 +56,9 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
+
+        SearchManager searchManager = new SearchManager();
+        searchManager.getSearchableInfo(getComponentName());
 
         return super.onCreateOptionsMenu(menu);
     }
