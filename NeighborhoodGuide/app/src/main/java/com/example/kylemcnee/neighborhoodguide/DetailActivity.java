@@ -3,6 +3,8 @@ package com.example.kylemcnee.neighborhoodguide;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 public class DetailActivity extends AppCompatActivity {
 
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+    Cursor cursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
 
 
     @Override
@@ -33,6 +36,15 @@ public class DetailActivity extends AppCompatActivity {
 
         ImageView headerImage = (ImageView)findViewById(R.id.headerImage);
         //TODO retrieve header image from image column
+        int resId = getResources().getIdentifier(
+                cursor.getString(cursor.getColumnIndex("IMAGE")),    // file name w/o extension
+                "raw",                          // file stored in res/raw/
+                getPackageName()
+        );
+        if (resId != 0) { // getIdentifier returns 0 if resource not found
+            Bitmap image = BitmapFactory.decodeResource(getResources(), resId);
+            headerImage.setImageBitmap(image);
+        }
 
        fab.setOnClickListener(favoriteListener);
     }
@@ -46,7 +58,7 @@ public class DetailActivity extends AppCompatActivity {
             Cursor favoriteCursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
 
             String favorite = favoriteCursor.getString(favoriteCursor.getColumnIndex(GloryholeOpenHelper.COL_NAME));
-            
+
             Intent favoriteIntent = new Intent(DetailActivity.this, FavoritesActivity.class);
             favoriteIntent.putExtra("favorite", favorite);
             startActivity(favoriteIntent);
