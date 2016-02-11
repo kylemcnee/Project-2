@@ -116,8 +116,8 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(GLORYHOLE_LIST_TABLE_NAME,
                 GLORYHOLE_COLUMNS,
-                COL_NAME + " LIKE ?",
-                new String[]{"%" + query + "%"},
+                COL_NAME + " LIKE ? OR " + COL_ADDRESS + " LIKE ?",
+                new String[]{"%" + query + "%", "%" + query + "%"},
                 null,
                 null,
                 null,

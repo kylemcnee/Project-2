@@ -20,7 +20,8 @@ import android.widget.Toast;
 
 public class SearchActivity extends AppCompatActivity {
 
-    Cursor mCursor;
+    CursorAdapter mCursorAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,76 +29,50 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         //Gets a reference to an instance of the helper, and the listview in which search results will be displayed.
-        GloryholeOpenHelper helper = GloryholeOpenHelper.getInstance(SearchActivity.this);
         ListView listView = (ListView)findViewById(R.id.resultList);
 
-        Intent intent = getIntent();
+        Cursor mCursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
 
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-
-            //The following lines are what conducts the actual search using the query provided by the user.
-            String query = intent.getStringExtra(SearchManager.QUERY);
-
-            Cursor nameCursor = helper.searchGloryholeListByName(query);
-            Cursor addressCursor = helper.searchGloryholeListByAddress(query);
-
-            //This if-else checks to see if the cursor is pointing to anything in the name column,
-            // then swaps the cursor and notifies the adapter that results are being listed.
-            if (nameCursor != null && nameCursor.getCount() > 0){
-
-                    cursorAdapter.swapCursor(nameCursor);
-                    cursorAdapter.notifyDataSetChanged();
-
-            //Same as above, but for the address search
-            }else if (addressCursor != null && addressCursor.getCount() > 0){
-
-                    cursorAdapter.swapCursor(addressCursor);
-                    cursorAdapter.notifyDataSetChanged();
-
-            }else{
-                Toast.makeText(SearchActivity.this, "Please enter a name, address, or neighborhood",
-                        Toast.LENGTH_LONG).show();
+         mCursorAdapter= new CursorAdapter(SearchActivity.this, mCursor,0) {
+            @Override
+            public View newView(Context context, Cursor cursor, ViewGroup parent) {
+                //Creates a simple list view to be inflated
+                return LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
             }
 
-
-        }
-
-        mCursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
-
-        listView.setAdapter(cursorAdapter);
-        listView.setOnItemClickListener(listener);
-
-    }
-
-    CursorAdapter cursorAdapter = new CursorAdapter(SearchActivity.this, mCursor,0) {
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            //Creates a simple list view to be inflated
-            return LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
+            @Override
+            public void bindView(View view, Context context, Cursor cursor) {
 
                 //Sets the search result textview to the name and address pulled from the database by the cursor
                 TextView textView = (TextView)view.findViewById(android.R.id.text1);
-                String resultString = mCursor.getString(mCursor.getColumnIndex(GloryholeOpenHelper.COL_NAME))+ " " + mCursor.getString(mCursor.getColumnIndex(GloryholeOpenHelper.COL_ADDRESS));
+                String resultString = cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_NAME))+ " " + cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_ADDRESS));
                 textView.setText(resultString);
-        }
-    };
+            }
+        };
 
-    AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener(){
+        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener(){
 
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            //Stores the ID of the row that was clicked and sends it to the Detail activity
-            int dbID = mCursor.getColumnIndex("_id");
-            Intent i = new Intent(SearchActivity.this, DetailActivity.class);
-            i.putExtra("id", dbID);
-            startActivity(i);
-        }
-    };
+                //Stores the ID of the row that was clicked and sends it to the Detail activity
+                int dbID = mCursorAdapter.getCursor().getColumnIndex("_id");
+                Intent i = new Intent(SearchActivity.this, DetailActivity.class);
+                i.putExtra("id", dbID);
+                startActivity(i);
+            }
+        };
+
+
+
+        //Sets the cursor adapter and the item click listener
+        listView.setAdapter(mCursorAdapter);
+        listView.setOnItemClickListener(listener);
+        handleIntent(getIntent());
+
+    }
+
+
 
     public boolean onCreateOptionsMenu(Menu menu){
 
@@ -113,5 +88,28 @@ public class SearchActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent){
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+
+            //The following lines are what conducts the actual search using the query provided by the user.
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this)
+            .searchGloryholeListByName(query);
+
+            mCursorAdapter.swapCursor(cursor);
+
+            //This if-else checks to see if the cursor is pointing to anything in the name column,
+            // then swaps the cursor and notifies the adapter that results are being listed.
+
+
+        }
+    }
 
 }

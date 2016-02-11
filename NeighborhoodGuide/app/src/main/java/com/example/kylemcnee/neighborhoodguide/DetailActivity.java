@@ -23,6 +23,9 @@ import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
+    //TODO Find out how to set the text in the detail activity to the appropriate text from the database
+
+    //Gets reference to the floating action button, creates a new cursor for this activity.
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     Cursor cursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
 
@@ -34,8 +37,10 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //References the image view, which is nested in the collapsible toolbar
         ImageView headerImage = (ImageView)findViewById(R.id.headerImage);
-        //TODO retrieve header image from image column
+
+        //TODO Will this actually work?
         int resId = getResources().getIdentifier(
                 cursor.getString(cursor.getColumnIndex("IMAGE")),    // file name w/o extension
                 "raw",                          // file stored in res/raw/
@@ -58,8 +63,8 @@ public class DetailActivity extends AppCompatActivity {
 
             Cursor favoriteCursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
 
-            String favorite = favoriteCursor.getString(favoriteCursor.getColumnIndex(GloryholeOpenHelper.COL_NAME));
 
+            String favorite = favoriteCursor.getString(favoriteCursor.getColumnIndex(GloryholeOpenHelper.COL_NAME));
             Intent favoriteIntent = new Intent(DetailActivity.this, FavoritesActivity.class);
             favoriteIntent.putExtra("favorite", favorite);
             startActivity(favoriteIntent);
