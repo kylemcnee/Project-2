@@ -17,59 +17,65 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class SearchActivity extends AppCompatActivity {
-    ListView listView = (ListView)findViewById(R.id.resultList);
 
+    Cursor mCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        GloryholeOpenHelper.getInstance(SearchActivity.this);
+
+        ListView listView = (ListView)findViewById(R.id.resultList);
+
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 
             //TODO Something has to be done with this query, but i don't...know...what...
             String query = intent.getStringExtra(SearchManager.QUERY);
+
+
         }
 
+        mCursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
 
+        listView.setAdapter(cursorAdapter);
+        listView.setOnItemClickListener(listener);
 
-        Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
-        CursorAdapter cursorAdapter = new CursorAdapter(SearchActivity.this, cursor,0) {
-            @Override
-            public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                return LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
-            }
-
-            @Override
-            public void bindView(View view, Context context, Cursor cursor) {
-
-                //TODO Figure out WTF is going on here
-                /*TextView textView = (TextView)view.findViewById(android.R.id.text1);
-                String resultString = cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_NAME))+ " " + cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_ADDRESS));
-                textView.setText(resultString);*/
-
-
-            }
-        }; listView.setAdapter(cursorAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                //TODO send the row to the detail activity
-                Intent i = new Intent(SearchActivity.this, FavoritesActivity.class);
-                startActivity(i);
-            }
-        });
     }
+
+    CursorAdapter cursorAdapter = new CursorAdapter(SearchActivity.this, mCursor,0) {
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            return LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
+        }
+
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+
+                TextView textView = (TextView)view.findViewById(android.R.id.text1);
+                String resultString = mCursor.getString(mCursor.getColumnIndex(GloryholeOpenHelper.COL_NAME))+ " " + mCursor.getString(mCursor.getColumnIndex(GloryholeOpenHelper.COL_ADDRESS));
+                textView.setText(resultString);
+        }
+    };
+
+    AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener(){
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //TODO send the row to the detail activity
+
+            Intent i = new Intent(SearchActivity.this, FavoritesActivity.class);
+            startActivity(i);
+        }
+    };
 
 
 
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-
 
         SearchManager searchManager = (SearchManager)SearchActivity.this.getSystemService(Context.SEARCH_SERVICE);
         searchManager.getSearchableInfo(getComponentName());

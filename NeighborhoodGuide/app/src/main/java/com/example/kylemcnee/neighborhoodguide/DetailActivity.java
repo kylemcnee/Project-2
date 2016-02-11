@@ -27,6 +27,7 @@ public class DetailActivity extends AppCompatActivity {
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
+        //TODO Move onClick out of onCreate
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +54,6 @@ public class DetailActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        //TODO change SearchActivity to the parent activity/main activity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
