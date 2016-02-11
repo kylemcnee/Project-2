@@ -18,10 +18,12 @@ public class FavoritesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
+        //Grabs the intent of the favorited item, and adds it to a favorites array
         Intent intent = getIntent();
         String newFavorite = intent.getStringExtra("favorite");
         favoritesArray.add(newFavorite);
 
+        //Adapts the favorites List Array into a list view.
         ArrayAdapter<String> favoritesAdapter = new ArrayAdapter<String>(FavoritesActivity.this, android.R.layout.simple_list_item_1, favoritesArray);
         favoritesList.setAdapter(favoritesAdapter);
         favoritesAdapter.notifyDataSetChanged();

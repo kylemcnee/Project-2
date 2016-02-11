@@ -140,8 +140,4 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
-
-
-
-
 }

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,22 +27,28 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        //Gets a reference to an instance of the helper, and the listview in which search results will be displayed.
         GloryholeOpenHelper helper = GloryholeOpenHelper.getInstance(SearchActivity.this);
         ListView listView = (ListView)findViewById(R.id.resultList);
 
         Intent intent = getIntent();
+
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 
+            //The following lines are what conducts the actual search using the query provided by the user.
             String query = intent.getStringExtra(SearchManager.QUERY);
 
             Cursor nameCursor = helper.searchGloryholeListByName(query);
             Cursor addressCursor = helper.searchGloryholeListByAddress(query);
 
+            //This if-else checks to see if the cursor is pointing to anything in the name column,
+            // then swaps the cursor and notifies the adapter that results are being listed.
             if (nameCursor != null && nameCursor.getCount() > 0){
 
                     cursorAdapter.swapCursor(nameCursor);
                     cursorAdapter.notifyDataSetChanged();
 
+            //Same as above, but for the address search
             }else if (addressCursor != null && addressCursor.getCount() > 0){
 
                     cursorAdapter.swapCursor(addressCursor);
@@ -65,12 +72,14 @@ public class SearchActivity extends AppCompatActivity {
     CursorAdapter cursorAdapter = new CursorAdapter(SearchActivity.this, mCursor,0) {
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            //Creates a simple list view to be inflated
             return LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false);
         }
 
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
 
+                //Sets the search result textview to the name and address pulled from the database by the cursor
                 TextView textView = (TextView)view.findViewById(android.R.id.text1);
                 String resultString = mCursor.getString(mCursor.getColumnIndex(GloryholeOpenHelper.COL_NAME))+ " " + mCursor.getString(mCursor.getColumnIndex(GloryholeOpenHelper.COL_ADDRESS));
                 textView.setText(resultString);
@@ -81,19 +90,25 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //TODO send the row to the detail activity
 
-            Intent i = new Intent(SearchActivity.this, FavoritesActivity.class);
+            //Stores the ID of the row that was clicked and sends it to the Detail activity
+            int dbID = mCursor.getColumnIndex("_id");
+            Intent i = new Intent(SearchActivity.this, DetailActivity.class);
+            i.putExtra("id", dbID);
             startActivity(i);
         }
     };
 
     public boolean onCreateOptionsMenu(Menu menu){
+
+        //Inflates the Search bar menu
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
 
+        //Retrieves Android's baked in search service, sets up the search view
         SearchManager searchManager = (SearchManager)SearchActivity.this.getSystemService(Context.SEARCH_SERVICE);
-        searchManager.getSearchableInfo(getComponentName());
+        SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return super.onCreateOptionsMenu(menu);
     }

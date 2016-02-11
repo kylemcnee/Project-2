@@ -52,6 +52,7 @@ public class DetailActivity extends AppCompatActivity {
     View.OnClickListener favoriteListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            //When clicked, the image on the button changes and a toast shows alerting the user they've added it to their favorites.
             fab.setImageResource(R.drawable.hardcock);
             Toast.makeText(DetailActivity.this, "Gloryhole added to favorites", Toast.LENGTH_SHORT).show();
 
