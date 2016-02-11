@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -26,8 +27,6 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         GloryholeOpenHelper helper = GloryholeOpenHelper.getInstance(SearchActivity.this);
-
-
         ListView listView = (ListView)findViewById(R.id.resultList);
 
         Intent intent = getIntent();
@@ -40,9 +39,18 @@ public class SearchActivity extends AppCompatActivity {
             Cursor addressCursor = helper.searchGloryholeListByAddress(query);
 
             if (nameCursor != null && nameCursor.getCount() > 0){
+
                     cursorAdapter.swapCursor(nameCursor);
+                    cursorAdapter.notifyDataSetChanged();
+
             }else if (addressCursor != null && addressCursor.getCount() > 0){
+
                     cursorAdapter.swapCursor(addressCursor);
+                    cursorAdapter.notifyDataSetChanged();
+
+            }else{
+                Toast.makeText(SearchActivity.this, "Pelase enter a name, address, or neighborhood",
+                        Toast.LENGTH_LONG).show();
             }
 
 
@@ -80,8 +88,6 @@ public class SearchActivity extends AppCompatActivity {
             startActivity(i);
         }
     };
-
-
 
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
