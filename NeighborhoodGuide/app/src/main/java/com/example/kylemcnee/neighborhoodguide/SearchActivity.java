@@ -32,7 +32,6 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 
-            //TODO Something has to be done with this query, but i don't...know...what...
             String query = intent.getStringExtra(SearchManager.QUERY);
 
             Cursor nameCursor = helper.searchGloryholeListByName(query);
@@ -49,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
                     cursorAdapter.notifyDataSetChanged();
 
             }else{
-                Toast.makeText(SearchActivity.this, "Pelase enter a name, address, or neighborhood",
+                Toast.makeText(SearchActivity.this, "Please enter a name, address, or neighborhood",
                         Toast.LENGTH_LONG).show();
             }
 

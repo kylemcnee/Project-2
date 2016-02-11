@@ -1,5 +1,6 @@
 package com.example.kylemcnee.neighborhoodguide;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -16,8 +17,12 @@ public class FavoritesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
-        ArrayAdapter<String> favoritesAdapter = new ArrayAdapter<String>(FavoritesActivity.this, android.R.layout.simple_list_item_1, favoritesArray);
 
+        Intent intent = getIntent();
+        String newFavorite = intent.getStringExtra("favorite");
+        favoritesArray.add(newFavorite);
+
+        ArrayAdapter<String> favoritesAdapter = new ArrayAdapter<String>(FavoritesActivity.this, android.R.layout.simple_list_item_1, favoritesArray);
         favoritesList.setAdapter(favoritesAdapter);
         favoritesAdapter.notifyDataSetChanged();
 
