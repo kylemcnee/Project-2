@@ -25,7 +25,8 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        GloryholeOpenHelper.getInstance(SearchActivity.this);
+        GloryholeOpenHelper helper = GloryholeOpenHelper.getInstance(SearchActivity.this);
+
 
         ListView listView = (ListView)findViewById(R.id.resultList);
 
@@ -34,6 +35,15 @@ public class SearchActivity extends AppCompatActivity {
 
             //TODO Something has to be done with this query, but i don't...know...what...
             String query = intent.getStringExtra(SearchManager.QUERY);
+
+            Cursor nameCursor = helper.searchGloryholeListByName(query);
+            Cursor addressCursor = helper.searchGloryholeListByAddress(query);
+
+            if (nameCursor != null && nameCursor.getCount() > 0){
+                    cursorAdapter.swapCursor(nameCursor);
+            }else if (addressCursor != null && addressCursor.getCount() > 0){
+                    cursorAdapter.swapCursor(addressCursor);
+            }
 
 
         }
