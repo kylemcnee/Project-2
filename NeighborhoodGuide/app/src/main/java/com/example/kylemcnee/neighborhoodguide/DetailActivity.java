@@ -72,10 +72,10 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             //When clicked, the image on the button changes and a toast shows alerting the user they've added it to their favorites.
-            fab.setImageResource(R.drawable.hardcock);
+            fab.setImageResource(R.drawable.justrightstiffy);
             Toast.makeText(DetailActivity.this, "Gloryhole added to favorites", Toast.LENGTH_SHORT).show();
 
-          /*  Cursor favoriteCursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
+       /*     Cursor favoriteCursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
 
 
             String favorite = favoriteCursor.getString(favoriteCursor.getColumnIndex(GloryholeOpenHelper.COL_NAME));

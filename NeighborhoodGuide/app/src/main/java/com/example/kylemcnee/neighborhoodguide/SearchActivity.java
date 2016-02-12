@@ -64,8 +64,8 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String bleh = mCursorAdapter.getCursor().getString(mCursorAdapter.getCursor().getColumnIndex("_id"));
-                Toast.makeText(SearchActivity.this, bleh, Toast.LENGTH_SHORT).show();
+                /*String bleh = mCursorAdapter.getCursor().getString(mCursorAdapter.getCursor().getColumnIndex("_id"));
+                Toast.makeText(SearchActivity.this, bleh, Toast.LENGTH_SHORT).show();*/
 
                 //TODO what is the issue here?
                 //Stores the ID of the row that was clicked and sends it to the Detail activity
@@ -100,9 +100,6 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //The following lines are what conducts the actual search using the query provided by the user.
-
-                Toast.makeText(SearchActivity.this, "Helllllllooooo", Toast.LENGTH_SHORT).show();
-
                 Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this).searchGloryholeListByName(query);
 
                 mCursorAdapter.changeCursor(cursor);
@@ -129,8 +126,6 @@ public class SearchActivity extends AppCompatActivity {
 
             //The following lines are what conducts the actual search using the query provided by the user.
             String query = intent.getStringExtra(SearchManager.QUERY);
-
-            Toast.makeText(SearchActivity.this, "Helllllllooooo", Toast.LENGTH_SHORT).show();
 
             Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this).searchGloryholeListByName(query);
 

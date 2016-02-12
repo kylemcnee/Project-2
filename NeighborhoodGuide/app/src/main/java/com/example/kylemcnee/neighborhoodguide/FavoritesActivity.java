@@ -19,7 +19,7 @@ public class FavoritesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_favorites);
         favoritesList = (ListView)findViewById(R.id.favoritesList);
 
-        //Grabs the intent of the favorited item, and adds it to a favorites array
+        /*//Grabs the intent of the favorited item, and adds it to a favorites array
         Intent intent = getIntent();
         String newFavorite = intent.getStringExtra("favorite");
         favoritesArray.add(newFavorite);
@@ -27,7 +27,7 @@ public class FavoritesActivity extends AppCompatActivity {
         //Adapts the favorites List Array into a list view.
         ArrayAdapter<String> favoritesAdapter = new ArrayAdapter<String>(FavoritesActivity.this, android.R.layout.simple_list_item_1, favoritesArray);
         favoritesList.setAdapter(favoritesAdapter);
-        favoritesAdapter.notifyDataSetChanged();
+        favoritesAdapter.notifyDataSetChanged();*/
 
     }
 }
