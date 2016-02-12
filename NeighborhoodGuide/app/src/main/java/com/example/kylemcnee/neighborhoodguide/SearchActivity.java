@@ -28,10 +28,12 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
         //Gets a reference to an instance of the helper, and the listview in which search results will be displayed.
         final ListView listView = (ListView)findViewById(R.id.resultList);
 
         final Cursor mCursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
+
 
          mCursorAdapter= new CursorAdapter(SearchActivity.this, mCursor,0) {
             @Override
@@ -47,26 +49,29 @@ public class SearchActivity extends AppCompatActivity {
                 TextView textView = (TextView)view.findViewById(android.R.id.text1);
 
                 String resultString = cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_NAME))+ " " + cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_ADDRESS));
+                textView.setText(resultString);
+
                 mCursorAdapter.changeCursor(cursor);
                 mCursorAdapter.notifyDataSetChanged();
-                textView.setText(resultString);
 
             }
         };
+        listView.setAdapter(mCursorAdapter);
+
 
         AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener(){
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                /*String bleh = mCursor.getString(mCursor.getColumnIndex("_id"));
-                Toast.makeText(SearchActivity.this, bleh, Toast.LENGTH_SHORT).show();*/
+                String bleh = mCursorAdapter.getCursor().getString(mCursorAdapter.getCursor().getColumnIndex("_id"));
+                Toast.makeText(SearchActivity.this, bleh, Toast.LENGTH_SHORT).show();
 
-                //TODO what is the issue here
+                //TODO what is the issue here?
                 //Stores the ID of the row that was clicked and sends it to the Detail activity
-              //  int dbID = mCursorAdapter.getCursor().getColumnIndex("_id");
+                int dbID = Integer.valueOf(mCursorAdapter.getCursor().getString(mCursorAdapter.getCursor().getColumnIndex("_id")));
                 Intent i = new Intent(SearchActivity.this, DetailActivity.class);
-              //  i.putExtra("id", dbID);
+                i.putExtra("id", dbID);
                 startActivity(i);
             }
         };
@@ -75,7 +80,6 @@ public class SearchActivity extends AppCompatActivity {
         //Sets the cursor adapter and the item click listener
         listView.setOnItemClickListener(listener);
 
-        listView.setAdapter(mCursorAdapter);
         handleIntent(getIntent());
     }
 
@@ -91,6 +95,26 @@ public class SearchActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager)SearchActivity.this.getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //The following lines are what conducts the actual search using the query provided by the user.
+
+                Toast.makeText(SearchActivity.this, "Helllllllooooo", Toast.LENGTH_SHORT).show();
+
+                Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this).searchGloryholeListByName(query);
+
+                mCursorAdapter.changeCursor(cursor);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -106,9 +130,11 @@ public class SearchActivity extends AppCompatActivity {
             //The following lines are what conducts the actual search using the query provided by the user.
             String query = intent.getStringExtra(SearchManager.QUERY);
 
+            Toast.makeText(SearchActivity.this, "Helllllllooooo", Toast.LENGTH_SHORT).show();
+
             Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this).searchGloryholeListByName(query);
 
-            mCursorAdapter.swapCursor(cursor);
+            mCursorAdapter.changeCursor(cursor);
 
 
 

@@ -29,11 +29,10 @@ public class DetailActivity extends AppCompatActivity {
     //TODO Find out how to set the text in the detail activity to the appropriate text from the database
 
     //Gets reference to the floating action button, creates a new cursor for this activity.
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    Cursor cursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
-    TextView textView = (TextView)findViewById(R.id.descriptionTextView);
-    ImageView headerImage = (ImageView)findViewById(R.id.headerImage);
-
+    FloatingActionButton fab;
+    Cursor cursor;
+    TextView textView;
+    ImageView headerImage;
 
 
     @Override
@@ -43,16 +42,21 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        headerImage = (ImageView)findViewById(R.id.headerImage);
+        textView = (TextView)findViewById(R.id.descriptionTextView);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
         Intent receivingIntent = getIntent();
-        //receivingIntent.getIntExtra("id", 0);
+        int passedID = receivingIntent.getIntExtra("id", -1);
+        cursor = GloryholeOpenHelper.getInstance(DetailActivity.this).searchGloryholeListByID(passedID);
 
+        cursor.moveToFirst();
+        getSupportActionBar().setTitle(cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_NAME)));
+        textView.setText(cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_DESCRIPTION)));
 
-        //TODO how do I get this textview to reflect the description/name/address?
-        textView.setText(cursor.getString(7));
-
-        //TODO Will this actually work?
+        //Retrieves the image and sets it to the imageview
         int resId = getResources().getIdentifier(
-                cursor.getString(cursor.getColumnIndex("IMAGE")),    // file name w/o extension
+                cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_IMAGE)),    // file name w/o extension
                 "raw",                          // file stored in res/raw/
                 getPackageName()
         );
@@ -71,20 +75,20 @@ public class DetailActivity extends AppCompatActivity {
             fab.setImageResource(R.drawable.hardcock);
             Toast.makeText(DetailActivity.this, "Gloryhole added to favorites", Toast.LENGTH_SHORT).show();
 
-            Cursor favoriteCursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
+          /*  Cursor favoriteCursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
 
 
             String favorite = favoriteCursor.getString(favoriteCursor.getColumnIndex(GloryholeOpenHelper.COL_NAME));
             Intent favoriteIntent = new Intent(DetailActivity.this, FavoritesActivity.class);
             favoriteIntent.putExtra("favorite", favorite);
-            startActivity(favoriteIntent);
+            startActivity(favoriteIntent);*/
 
         }
 
     };
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
@@ -104,5 +108,5 @@ public class DetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

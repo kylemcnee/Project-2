@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by Kyle McNee on 2/4/2016.
@@ -15,7 +16,7 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
 
     private static GloryholeOpenHelper mInstance;
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "GLORYHOLE_DB";
     public static final String GLORYHOLE_LIST_TABLE_NAME = "GLORYHOLE_LIST";
 
@@ -26,7 +27,7 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
     public static final String COL_FAVORITE = "FAVORITE" ;
     public static final String COL_IMAGE = "IMAGE";
 
-    public static final String[] GLORYHOLE_COLUMNS = {COL_ID, COL_NAME, COL_ADDRESS, COL_DESCRIPTION};
+    public static final String[] GLORYHOLE_COLUMNS = {COL_ID, COL_NAME, COL_ADDRESS, COL_DESCRIPTION, COL_FAVORITE, COL_IMAGE};
 
     private static final String CREATE_GLORYHOLE_LIST_TABLE = "CREATE TABLE " +
             GLORYHOLE_LIST_TABLE_NAME + " (" + COL_ID + " INTEGER PRIMARY KEY, " +
@@ -111,6 +112,21 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor searchGloryholeListByID(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Log.d("GloryholeOpenHelper","Querying at id: "+id);
+        Cursor cursor = db.query(GLORYHOLE_LIST_TABLE_NAME,
+                GLORYHOLE_COLUMNS,
+                COL_ID + " = ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                null,
+                null);
+
+        return cursor;
+    }
+
     public Cursor searchGloryholeListByName(String query){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -125,6 +141,7 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
+
 
     public Cursor searchGloryholeListByAddress(String query){
         SQLiteDatabase db = this.getReadableDatabase();

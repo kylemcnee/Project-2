@@ -10,13 +10,14 @@ import java.util.ArrayList;
 
 public class FavoritesActivity extends AppCompatActivity {
 
-    ListView favoritesList = (ListView)findViewById(R.id.favoritesList);
+    ListView favoritesList;
     ArrayList<String> favoritesArray = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
+        favoritesList = (ListView)findViewById(R.id.favoritesList);
 
         //Grabs the intent of the favorited item, and adds it to a favorites array
         Intent intent = getIntent();
