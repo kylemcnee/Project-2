@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +29,9 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         //Gets a reference to an instance of the helper, and the listview in which search results will be displayed.
-        ListView listView = (ListView)findViewById(R.id.resultList);
+        final ListView listView = (ListView)findViewById(R.id.resultList);
 
-        Cursor mCursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
+        final Cursor mCursor = GloryholeOpenHelper.getInstance(SearchActivity.this).getGloryholeList();
 
          mCursorAdapter= new CursorAdapter(SearchActivity.this, mCursor,0) {
             @Override
@@ -45,8 +45,12 @@ public class SearchActivity extends AppCompatActivity {
 
                 //Sets the search result textview to the name and address pulled from the database by the cursor
                 TextView textView = (TextView)view.findViewById(android.R.id.text1);
+
                 String resultString = cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_NAME))+ " " + cursor.getString(cursor.getColumnIndex(GloryholeOpenHelper.COL_ADDRESS));
+                mCursorAdapter.changeCursor(cursor);
+                mCursorAdapter.notifyDataSetChanged();
                 textView.setText(resultString);
+
             }
         };
 
@@ -55,21 +59,24 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                /*String bleh = mCursor.getString(mCursor.getColumnIndex("_id"));
+                Toast.makeText(SearchActivity.this, bleh, Toast.LENGTH_SHORT).show();*/
+
+                //TODO what is the issue here
                 //Stores the ID of the row that was clicked and sends it to the Detail activity
-                int dbID = mCursorAdapter.getCursor().getColumnIndex("_id");
+              //  int dbID = mCursorAdapter.getCursor().getColumnIndex("_id");
                 Intent i = new Intent(SearchActivity.this, DetailActivity.class);
-                i.putExtra("id", dbID);
+              //  i.putExtra("id", dbID);
                 startActivity(i);
             }
         };
 
 
-
         //Sets the cursor adapter and the item click listener
-        listView.setAdapter(mCursorAdapter);
         listView.setOnItemClickListener(listener);
-        handleIntent(getIntent());
 
+        listView.setAdapter(mCursorAdapter);
+        handleIntent(getIntent());
     }
 
 
@@ -84,7 +91,6 @@ public class SearchActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager)SearchActivity.this.getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -100,13 +106,10 @@ public class SearchActivity extends AppCompatActivity {
             //The following lines are what conducts the actual search using the query provided by the user.
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this)
-            .searchGloryholeListByName(query);
+            Cursor cursor = GloryholeOpenHelper.getInstance(SearchActivity.this).searchGloryholeListByName(query);
 
             mCursorAdapter.swapCursor(cursor);
 
-            //This if-else checks to see if the cursor is pointing to anything in the name column,
-            // then swaps the cursor and notifies the adapter that results are being listed.
 
 
         }

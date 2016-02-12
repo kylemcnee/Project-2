@@ -16,7 +16,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -28,6 +31,9 @@ public class DetailActivity extends AppCompatActivity {
     //Gets reference to the floating action button, creates a new cursor for this activity.
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     Cursor cursor = GloryholeOpenHelper.getInstance(DetailActivity.this).getGloryholeList();
+    TextView textView = (TextView)findViewById(R.id.descriptionTextView);
+    ImageView headerImage = (ImageView)findViewById(R.id.headerImage);
+
 
 
     @Override
@@ -37,8 +43,12 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //References the image view, which is nested in the collapsible toolbar
-        ImageView headerImage = (ImageView)findViewById(R.id.headerImage);
+        Intent receivingIntent = getIntent();
+        //receivingIntent.getIntExtra("id", 0);
+
+
+        //TODO how do I get this textview to reflect the description/name/address?
+        textView.setText(cursor.getString(7));
 
         //TODO Will this actually work?
         int resId = getResources().getIdentifier(

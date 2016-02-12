@@ -29,12 +29,12 @@ public class GloryholeOpenHelper extends SQLiteOpenHelper {
     public static final String[] GLORYHOLE_COLUMNS = {COL_ID, COL_NAME, COL_ADDRESS, COL_DESCRIPTION};
 
     private static final String CREATE_GLORYHOLE_LIST_TABLE = "CREATE TABLE " +
-            GLORYHOLE_LIST_TABLE_NAME + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            GLORYHOLE_LIST_TABLE_NAME + " (" + COL_ID + " INTEGER PRIMARY KEY, " +
             COL_NAME + " TEXT, " +
             COL_ADDRESS + " TEXT, " +
-            COL_DESCRIPTION + " TEXT " +
-            COL_FAVORITE + " TEXT " +
-            COL_IMAGE + " TEXT )";
+            COL_DESCRIPTION + " TEXT, " +
+            COL_FAVORITE + " TEXT, " +
+            COL_IMAGE + " TEXT);";
 
 
     private GloryholeOpenHelper (Context context) {
